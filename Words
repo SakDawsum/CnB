@@ -1,0 +1,33 @@
+import java.sql.*;
+import javax.swing.JOptionPane;
+public class CowsNBulls {
+    
+    public static void main (String[] args){
+                
+       for(int i = 0; i<= 10; i++ ){
+           String wd = getWord();
+           System.out.println(wd);
+       }
+    }
+    private static String getWord(){
+           String word = query("select * from words order by rand() limit 1;","word");   
+           return word;
+    }   
+    static String query(String statement, String ret) {
+        String str = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cowsbulls", "root", "");
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(statement);
+            if (rs.next()) {
+                str = rs.getString(ret);
+            }
+            st.close();
+            conn.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "" + e.getMessage());
+        }
+        return str;
+    }
+}
